@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password crack time calculator</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="p1">Mật khẩu của bạn an toàn đến đâu?</div>
+    <div class="p2">Nhập vào không quá 20 ký tự</div>
+    <div class="p2">Bao gồm: a-z A-Z 0-9</div>
+    <div class="p2">Và các ký tự đặc biệt: ~!@#$%^&*()_-=+/\|?.,<>;:'"</div>
+    <input type="text" class="input" placeholder="NHẬP MẬT KHẨU" oninput="validateInput()"/>
+    <div class="response"></div>
+    <script>
+        const getPasswordCrackTime = async (data) => {
+            try {
+                const res = await axios.post("http://localhost:5000/post", { "password" : data })
+                return res.data;
+            } catch (error) {
+                console.log(error);
+            }
+            return "hello"
+        }
+
+        async function validateInput() {
+            const input = document.getElementsByClassName("input")[0];
+            const response = document.getElementsByClassName("response")[0];
+            const regex = /^[a-zA-Z0-9~!@#$%^&*()_\-=+\\/|?.<>,;:'"]*$/;
+
+            if (!input) {
+                response.textContent = "";
+            }
+            else if (input.value.length === 0) {
+                response.textContent = "";
+            }
+            else if (input.value.length > 20) {
+                response.textContent = "Chỉ được nhập tối đa 20 ký tự";
+                response.style.color = "red";
+            }
+            else if (!regex.test(input.value)) {
+                response.textContent = "Không được nhập các ký tự quá đặc biệt";
+                response.style.color = "red";
+            }
+            else {
+                response.textContent = await getPasswordCrackTime(input.value);
+                response.style.color = "black";
+            }
+        }
+    </script>
+</body>
+</html>
