@@ -1,0 +1,5 @@
+zxcvbn==4.4.25
+joblib==1.4.2
+scikit-learn==1.6.0
+nltk==3.9.1
+pyenchant==3.2.2
